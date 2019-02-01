@@ -6,8 +6,7 @@ services:
     environment:
       - REDIS_HOST
       - REDIS_PORT
-      - REMOTE_BACKUP_PATH
-      - LOCAL_BACKUP_PATH
+      - BACKUP_PATH
       - AWS_BUCKET
       - AWS_ACCESS_KEY_ID
       - AWS_SECRET_ACCESS_KEY
@@ -17,8 +16,6 @@ services:
     networks:
       - vernemq-net
       - metric-net
-    volumes:
-      - redis-data-vol:/redis
     deploy:
       mode: replicated
       replicas: 1
@@ -40,9 +37,4 @@ networks:
 
   metric-net:
     name: ${METRIC_NET_NAME:-metric-net}
-    external: true
-
-volumes:
-  redis-data-vol:
-    name: ${REDIS_DATA_VOL_NAME:-vernemq-redis-data-vol}
     external: true

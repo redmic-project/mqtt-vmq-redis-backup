@@ -2,8 +2,7 @@
 
 REDIS_HOST="${REDIS_HOST:-vmq-redis}"
 REDIS_PORT="${REDIS_PORT:-6379}"
-REMOTE_BACKUP_PATH="${REMOTE_BACKUP_PATH:-/data}"
-LOCAL_BACKUP_PATH="${LOCAL_BACKUP_PATH:-/redis}"
+BACKUP_PATH="${BACKUP_PATH:-/redis}"
 
 if [ -z "${AWS_BUCKET}" ]
 then
@@ -25,10 +24,10 @@ fi
 
 startSeconds=$(date +%s)
 
-currentDate=$(date +%Y-%m-%d_%H_%M_%S)
+currentDate=$(date +%Y-%m-%d_%H-%M-%S)
 backupFilename="vmq-redis-dump-${currentDate}.rdb"
 
-if redis-cli -h ${REDIS_HOST} -p ${REDIS_PORT} --rdb "${REMOTE_BACKUP_PATH}/${backupFilename}"
+if redis-cli -h ${REDIS_HOST} -p ${REDIS_PORT} --rdb "${BACKUP_PATH}/${backupFilename}"
 then
 	echo "Backup successfully created"
 else
@@ -36,19 +35,17 @@ else
 	exit 1
 fi
 
-backupSize=$(stat -c %s "${LOCAL_BACKUP_PATH}/${backupFilename}")
+backupSize=$(stat -c %s "${BACKUP_PATH}/${backupFilename}")
 
 if [ ${backupSize} -eq 0 ]
 then
 	echo "Error! Backup file is empty"
-	rm -f "${LOCAL_BACKUP_PATH}/${backupFilename}"
 	exit 1
 fi
 
-if aws s3 cp "${LOCAL_BACKUP_PATH}/${backupFilename}" s3://${AWS_BUCKET}
+if aws s3 cp "${BACKUP_PATH}/${backupFilename}" s3://${AWS_BUCKET}
 then
 	echo "Backup successfully uploaded"
-	rm -f "${LOCAL_BACKUP_PATH}/${backupFilename}"
 else
 	echo "Backup upload failed!"
 	exit 1
