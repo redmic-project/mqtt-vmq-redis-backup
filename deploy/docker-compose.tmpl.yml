@@ -1,0 +1,40 @@
+version: '3.5'
+
+services:
+  vmq-redis-backup:
+    image: ${IMAGE_NAME}:${IMAGE_TAG:-latest}
+    environment:
+      - REDIS_HOST
+      - REDIS_PORT
+      - BACKUP_PATH
+      - AWS_BUCKET
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - PUSHGATEWAY_HOST
+      - PUSHGATEWAY_JOB
+    networks:
+      - vernemq-net
+      - metric-net
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        window: 1m
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: 32M
+        reservations:
+          memory: 16M
+
+networks:
+  vernemq-net:
+    name: ${VERNEMQ_NET_NAME:-vernemq-net}
+    external: true
+
+  metric-net:
+    name: ${METRIC_NET_NAME:-metric-net}
+    external: true
