@@ -4,6 +4,7 @@ LABEL maintainer="info@redmic.es"
 
 RUN apk --no-cache update && \
 	apk --no-cache add \
+		curl \
 		redis \
 		python3
 
