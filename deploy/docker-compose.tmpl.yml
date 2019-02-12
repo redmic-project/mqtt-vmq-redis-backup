@@ -26,9 +26,9 @@ services:
       resources:
         limits:
           cpus: '0.1'
-          memory: 32M
+          memory: 64M
         reservations:
-          memory: 16M
+          memory: 52M
 
 networks:
   vernemq-net:
