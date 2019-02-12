@@ -82,9 +82,6 @@ deploy-supporting-branch-develop:
   variables:
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.dev.yml
-    AWS_ACCESS_KEY_ID: ${DEV_AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${DEV_AWS_SECRET_ACCESS_KEY}
-    AWS_BUCKET: ${DEV_AWS_BUCKET}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} IMAGE_NAME=${IMAGE_NAME} COMPOSE_FILE=${COMPOSE_FILE} AWS_REGION=${AWS_REGION}
@@ -103,9 +100,6 @@ deploy-stable-branch-develop:
   variables:
     SSH_REMOTE: ${DEV_SSH_REMOTE}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.dev.yml
-    AWS_ACCESS_KEY_ID: ${DEV_AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${DEV_AWS_SECRET_ACCESS_KEY}
-    AWS_BUCKET: ${DEV_AWS_BUCKET}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} IMAGE_NAME=${IMAGE_NAME} COMPOSE_FILE=${COMPOSE_FILE} AWS_REGION=${AWS_REGION}
@@ -123,9 +117,6 @@ deploy-supporting-branch-production:
   variables:
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
-    AWS_ACCESS_KEY_ID: ${PRO_AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${PRO_AWS_SECRET_ACCESS_KEY}
-    AWS_BUCKET: ${PRO_AWS_BUCKET}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} IMAGE_NAME=${IMAGE_NAME} COMPOSE_FILE=${COMPOSE_FILE} AWS_REGION=${AWS_REGION}
@@ -144,9 +135,6 @@ deploy-stable-branch-production:
   variables:
     SSH_REMOTE: ${PRO_SSH_REMOTE}
     COMPOSE_FILE: docker-compose.tmpl.yml:docker-compose.prod.yml
-    AWS_ACCESS_KEY_ID: ${PRO_AWS_ACCESS_KEY_ID}
-    AWS_SECRET_ACCESS_KEY: ${PRO_AWS_SECRET_ACCESS_KEY}
-    AWS_BUCKET: ${PRO_AWS_BUCKET}
   script:
     - >
       deploy.sh IMAGE_TAG=${IMAGE_TAG} IMAGE_NAME=${IMAGE_NAME} COMPOSE_FILE=${COMPOSE_FILE} AWS_REGION=${AWS_REGION}
@@ -168,11 +156,11 @@ scheduled-run-stable-branch-develop:
   only:
     - schedules
 
-#scheduled-run-stable-branch-production:
-#  stage: maintenance
-#  variables:
-#    SSH_REMOTE: ${PRO_SSH_REMOTE}
-#    SERVICE: mqtt_${CI_PROJECT_NAME}
-#  script: relaunch.sh
-#  only:
-#    - schedules
+scheduled-run-stable-branch-production:
+  stage: maintenance
+  variables:
+    SSH_REMOTE: ${PRO_SSH_REMOTE}
+    SERVICE: mqtt_${CI_PROJECT_NAME}
+  script: relaunch.sh
+  only:
+    - schedules
