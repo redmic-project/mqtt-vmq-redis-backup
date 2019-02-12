@@ -4,7 +4,7 @@ stages:
   - deploy
   - maintenance
 
-image: registry.gitlab.com/redmic-project/docker/docker-deploy:latest
+image: registry.gitlab.com/redmic-project/docker/docker-deploy:${DOCKER_DEPLOY_IMAGE_TAG}
 
 variables:
   DOCKER_DRIVER: overlay2
@@ -19,6 +19,7 @@ services:
 
 docker-build-commit-non-master-branches:
   stage: package
+  image: docker:stable
   only:
     - branches
   except:
@@ -31,6 +32,7 @@ docker-build-commit-non-master-branches:
 
 docker-build-commit-master-branch:
   stage: package
+  image: docker:stable
   only:
     - master
   except:
@@ -42,6 +44,7 @@ docker-build-commit-master-branch:
 
 docker-tag-already-built-image:
   stage: package
+  image: docker:stable
   only:
     - tags
   script:
@@ -52,6 +55,7 @@ docker-tag-already-built-image:
 
 container-scanning:
   stage: test-package
+  image: docker:stable
   allow_failure: true
   only:
     - branches
