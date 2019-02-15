@@ -4,7 +4,7 @@ stages:
   - deploy
   - maintenance
 
-image: registry.gitlab.com/redmic-project/docker/docker-deploy:${DOCKER_DEPLOY_IMAGE_TAG}
+image: ${DOCKER_DEPLOY_IMAGE_NAME}:${DOCKER_DEPLOY_IMAGE_TAG}
 
 variables:
   DOCKER_DRIVER: overlay2
