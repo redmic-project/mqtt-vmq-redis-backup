@@ -48,7 +48,7 @@ fi
 
 echo "Uploading backup to S3 .."
 
-if aws s3 cp "${BACKUP_PATH}/${backupFilename}" s3://${AWS_BUCKET}
+if aws s3 cp "${BACKUP_PATH}/${backupFilename}" s3://${AWS_BUCKET} --quiet
 then
 	echo "Backup successfully uploaded"
 else
