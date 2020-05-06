@@ -16,14 +16,18 @@ stages:
   - maintenance
 
 variables:
-  STACK: mqtt
-  STATUS_CHECK_DELAY: 30
+  PROJECT_PARENT_NAME: mqtt
 
 .deploy:
-  script:
-    - >
-      deploy.sh IMAGE_NAME=${IMAGE_NAME} IMAGE_TAG=${IMAGE_TAG} AWS_REGION=${AWS_REGION} AWS_BUCKET=${AWS_BUCKET}
-      AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+  variables:
+    STACK: ${PROJECT_PARENT_NAME}
+    SERVICES_TO_CHECK: ${PROJECT_PARENT_NAME}_${CI_PROJECT_NAME}
+    STATUS_CHECK_DELAY: 30
+
+.scheduled-run:
+  variables:
+    STACK: ${PROJECT_PARENT_NAME}
+    SERVICE: ${PROJECT_PARENT_NAME}_${CI_PROJECT_NAME}
 
 scheduled-run-development:
   script: ':'
