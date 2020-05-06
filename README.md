@@ -17,7 +17,7 @@ Get your backup file from S3 and copy it inside **vernemq-redis-data-vol** (moun
 
 Update **vmq-redis** service to change command in containers:
 
-```
+```sh
 # Assuming 'mqtt' is the stack name
 $ docker service update --args="redis-server" mqtt_vmq-redis
 ```
@@ -28,7 +28,7 @@ This tells redis to load database from `dump.rdb` and stop using `appendonly.aof
 
 Get into new container (Portainer or CLI) and run these commands:
 
-```
+```sh
 # Replace the container name
 $ docker exec -it mqtt_vmq-redis.<n>.<xxx> /bin/bash
 # Assuming 'mqtt' is the stack name and '/data' is the current path
@@ -43,7 +43,7 @@ This will rotate the old appendonly file and enable again appendonly mode, to ge
 
 Update **vmq-redis** service again to change command in containers:
 
-```
+```sh
 # Assuming 'mqtt' is the stack name
 docker service update --args="redis-server --appendonly yes" mqtt_vmq-redis
 ```
