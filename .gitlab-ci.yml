@@ -13,8 +13,9 @@ include:
     file: '/maintenance.yml'
 
 stages:
+  - pre-package
   - package
-  - test-package
+  - post-package
   - deploy
   - maintenance
 
