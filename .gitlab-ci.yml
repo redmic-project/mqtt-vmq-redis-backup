@@ -21,6 +21,7 @@ stages:
 
 variables:
   PROJECT_PARENT_NAME: mqtt
+  DEVELOPMENT_MAINTENANCE_DISABLED: 'true'
 
 .deploy:
   variables:
@@ -32,6 +33,3 @@ variables:
   variables:
     STACK: ${PROJECT_PARENT_NAME}
     SERVICE: ${PROJECT_PARENT_NAME}_${CI_PROJECT_NAME}
-
-scheduled-run-development:
-  script: ':'
