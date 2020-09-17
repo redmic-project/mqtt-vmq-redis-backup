@@ -3,6 +3,16 @@ version: '3.5'
 services:
   vmq-redis-backup:
     image: ${IMAGE_NAME:-registry.gitlab.com/redmic-project/mqtt/vmq-redis-backup}:${IMAGE_TAG:-latest}
+    build:
+      context: ..
+      dockerfile: ${DOCKERFILE:-Dockerfile}
+      args:
+        ALPINE_IMAGE_TAG:
+        CURL_VERSION:
+        REDIS_VERSION:
+        PYTHON3_VERSION:
+        PY3_PIP_VERSION:
+        AWSCLI_VERSION:
     environment:
       REDIS_HOST:
       REDIS_PORT:
@@ -14,14 +24,16 @@ services:
       PUSHGATEWAY_HOST:
       PUSHGATEWAY_JOB:
     networks:
-      - vernemq-net
-      - metric-net
+      vernemq-net:
+      metric-net:
     deploy:
       mode: replicated
       replicas: ${REPLICAS:-1}
       restart_policy:
         condition: on-failure
         delay: ${RESTART_DELAY:-10s}
+      update_config:
+        delay: ${UPDATE_DELAY:-1m}
       resources:
         limits:
           cpus: '${RESOURCES_LIMITS_CPUS:-0.1}'
